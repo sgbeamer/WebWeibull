@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"sort"
+	"math"
 )
 
 func main() {
@@ -24,45 +24,50 @@ func main() {
 
 	// Bernard's Median Rank (i - 0.3)/(N + 0.4)
 	// declare the variable
-	bmr := []float64{} //float64
-	b := int(len(ttf)) //int
-	bf := float64(b)   //float64
-	a := float64(0)    //float64
-	for i := 0; i < b; i++ {
+	bmr := []float64{} 	//float64
+	b := int(len(ttf)) 	//int
+	bf := float64(b) 	//float64
+	a := float64(0)		//float64	
+	for i := 0; i < b; i++{
 		a = a + 1
 		bmr = append(bmr, ((a - 0.3) / (bf + 0.4)))
 		//fmt.Println(bmr[i])
 	}
 	fmt.Println()
 	fmt.Println("The ranks are ", bmr)
-
+	
 	// begin regression calcs
 	// convert bmr to X = ln(ln(1/(1-bmr[i]))
 	// convert ttf to Y = ln(ttf[i])
-	bmrX := []float64{}   //float64
-	ttfY := []float64{}   //float64
-	multXY := []float64{} //float64
-	sumXY := float64(0)   //float64
-	sumY := float64(0)    //float64
-	sumX := float64(0)    //float64
-	sumX2 := float64(0)   //float64
+	bmrX := [] float64{}		//float64
+	ttfY := [] float64{}		//float64	
+	multXY := []float64{}   	//float64
+	sumXY := float64(0)		//float64
+	sumY := float64(0)		//float64
+	sumX := float64(0)		//float64
+	sumX2 := float64(0)		//float64	
+	sumY2 := float64(0)
 	lnY := float64(0)
-	lnX := float64(0)
-	for i := 0; i < b; i++ {
+	lnX := float64(0)			
+	for i := 0; i < b; i++{
 		lnY = math.Log(ttf[i])
-		lnX = math.Log(math.Log(1 / (1 - bmr[i])))
-		bmrX = append(bmrX, lnX)
+		lnX = math.Log(math.Log(1/(1-bmr[i])))
+		bmrX = append(bmrX , lnX )
 		ttfY = append(ttfY, lnY)
 		multXY = append(multXY, bmrX[i]*ttfY[i])
 		sumXY = sumXY + multXY[i]
 		sumY = sumY + ttfY[i]
 		sumX = sumX + bmrX[i]
 		sumX2 = sumX2 + bmrX[i]*bmrX[i]
+		sumY2 = sumY2 + ttfY[i] * ttfY[i]
+		
 	}
-	avgY := sumY / bf
-	avgX := sumX / bf
-
-	fmt.Println("MultXY of bmr * ttf = ", multXY)
+	avgY := sumY / bf	
+	avgX := sumX /bf
+	beta := (sumXY - ((sumX * sumY) / bf)) / (sumX2 - ((sumX * sumX) / bf))
+	r := (sumXY - (( sumX - sumY) / bf) / math.Sqrt((sumX2 - (sumX * sumX) / bf) * (sumY2 - (sumY * sumY) / bf)))
+	r2 := r * r
+	fmt.Println("MultXY of bmr * ttf = ", multXY)	 
 	fmt.Println("Sums of bmr * ttf = ", sumXY)
 	fmt.Println("Sums of ttf = ", sumY)
 	fmt.Println("Average y(bmr) = ", avgY)
@@ -70,5 +75,9 @@ func main() {
 	fmt.Println("Sum of x(ttf) = ", sumX)
 	fmt.Println("Sum of y(bmr) = ", sumY)
 	fmt.Println("Sum of x^2 = ", sumX2)
-
+	
+	fmt.Println("Beta = " , beta)
+	fmt.Println("r = " , r)
+	fmt.Println("r² = " , r2)
+	
 }
