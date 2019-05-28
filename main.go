@@ -10,7 +10,7 @@ func main() {
 	// Declare a slice of type float64 for times to failure
 	// need to input the data later - using test data to code the math now
 
-	ttf := []float64{10, 24, 12, 30, 15, 36}
+	ttf := []float64{7000, 1500, 4300, 2250, 4000}
 
 	// print ttf before sorting
 	fmt.Println("Original input ", ttf)
@@ -45,6 +45,7 @@ func main() {
 	sumXY := float64(0)   //float64
 	sumY := float64(0)    //float64
 	sumX := float64(0)    //float64
+	sumX2 := float64(0)   //float64
 	lnY := float64(0)
 	lnX := float64(0)
 	for i := 0; i < b; i++ {
@@ -56,6 +57,7 @@ func main() {
 		sumXY = sumXY + multXY[i]
 		sumY = sumY + ttfY[i]
 		sumX = sumX + bmrX[i]
+		sumX2 = sumX2 + bmrX[i]*bmrX[i]
 	}
 	avgY := sumY / bf
 	avgX := sumX / bf
@@ -65,5 +67,8 @@ func main() {
 	fmt.Println("Sums of ttf = ", sumY)
 	fmt.Println("Average y(bmr) = ", avgY)
 	fmt.Println("Average x(ttf) = ", avgX)
+	fmt.Println("Sum of x(ttf) = ", sumX)
+	fmt.Println("Sum of y(bmr) = ", sumY)
+	fmt.Println("Sum of x^2 = ", sumX2)
 
 }
