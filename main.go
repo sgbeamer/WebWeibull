@@ -46,13 +46,13 @@ func main() {
 	sumX2 := float64(0)		//float64	
 	sumY2 := float64(0)
 	lnY := float64(0)
-	lnX := float64(0)	
-			
+	lnX := float64(0)
+				
 	//loop through all the calcs
 	for i := 0; i < b; i++{
 		lnY = math.Log(ttf[i])
 		lnX = math.Log(math.Log(1/(1-bmr[i])))
-		sumXY = sumXY + lnX * lnY
+		sumXY = sumXY + (lnX * lnY)
 		sumY = sumY + lnY
 		sumX = sumX + lnX
 		sumX2 = sumX2 + lnX*lnX
@@ -62,21 +62,26 @@ func main() {
 	// calculate the other stuff that doesn't need to loop
 	avgY := sumY / bf	
 	avgX := sumX /bf
+	rNum := (sumXY - (( sumX * sumY) / bf))
+	rDenom := math.Sqrt((sumX2 - (sumX * sumX) / bf) * (sumY2 - (sumY * sumY) / bf))
 	beta := (sumXY - ((sumX * sumY) / bf)) / (sumX2 - ((sumX * sumX) / bf))  //checks ok
-	r := (sumXY - (( sumX * sumY) / bf) / math.Sqrt((sumX2 - (sumX * sumX) / bf) * (sumY2 - (sumY * sumY) / bf)))
+	r := rNum / rDenom
 	r2 := r * r
+	outA := avgY - beta*avgX
 	
 	// print results for testing
 	fmt.Println("Sums of x * y = ", sumXY)
 	fmt.Println("Sums of y = ", sumY)
+	fmt.Println("Sum of Y^2 = ", sumY2)
 	fmt.Println("Average y = ", avgY)
-	fmt.Println("Average x = ", avgX)
 	fmt.Println("Sum of x = ", sumX)
-	fmt.Println("Sum of y = ", sumY)
 	fmt.Println("Sum of x^2 = ", sumX2)
-	
-	fmt.Println("Beta = " , 1/beta)
+	fmt.Println("Average x = ", avgX)
+	fmt.Println("Factor A = ", outA)	
+	fmt.Println("calc beta = ", beta)
+	fmt.Println("Weibull Beta (1/beta) = " , 1/beta)
 	fmt.Println("r = " , r)
 	fmt.Println("r² = " , r2)
+	
 	
 }
