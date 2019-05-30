@@ -65,25 +65,32 @@ func main() {
 	fmt.Println("Ranking of ttf    " , ttfrnk)
 	fmt.Println("Reverse rankning  " , ttfrr)
 	
+		
 	//calculate the adjusted ranks
-	ttfcLenf64 := float64(len(ttfc))
-	ttfLenf64 := float64(ttfLen)
-	adjRank0 := (ttfLenf64 + 1)/(ttfrr[0] + 1)
+	ttfcLenf64 := float64(len(ttfc))  //THIS IS N
+	ttfLenf64 := float64(ttfLen)  
+	adjRank0 := (ttfcLenf64 + 1)/(ttfrr[0] + 1)
 	adjRank := []float64{adjRank0}
-	for i := 1 ; i < ttfLen ; i++ { //start indexing at 1 because initial value already calculated
+	for i := 1 ; i < ttfLen ; i++ { //start indexing at 1 because initial value already calculated  
 		z := i - 1
-		num := ttfrr[i]*adjRank[z]
-		den := ttfcLenf64 + 1
-		adjRank = append(adjRank , num/den)
+		num := (ttfrr[i]*adjRank[z]) + (ttfcLenf64 + 1)
+		den := ttfrr[i] + 1
+		adjRank0 := num/den
+		fmt.Println("Numerator ", num)
+		fmt.Println("Denominator " , den)
+		fmt.Println("Adjusted Rank value " , i , adjRank0)
+		adjRank = append(adjRank , adjRank0)
 		}
 	fmt.Println("Adjusted Ranks for input to Bernard " , adjRank)
 	fmt.Println()
+	
+	//PROGRAM IS GOOD TO HERE -----------------------------------------------------------------------------------------
 	
 	// Bernard's Median Rank (i - 0.3)/(N + 0.4)
 	// declare the variable
 	bmr := []float64{} 	//float64
 	for i := 0; i < ttfLen; i++{
-		bmr = append(bmr, ((adjRank[i] - 0.3) / (ttfLenf64 + 0.4)))
+		bmr = append(bmr, ((adjRank[i] - 0.3) / (ttfcLenf64 + 0.4)))    
 		//fmt.Println(bmr[i])
 	}
 	fmt.Println()
