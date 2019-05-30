@@ -128,6 +128,7 @@ func main() {
 	r := rNum / rDenom
 	r2 := r * r
 	outA := avgY - beta*avgX
+	eta :=  math.Pow(math.E , outA)
 	
 	// print results for testing
 	fmt.Println("Sums of x * y = ", sumXY)
@@ -139,9 +140,10 @@ func main() {
 	fmt.Println("Average x = ", avgX)
 	fmt.Println("Factor A = ", outA)	
 	fmt.Println("calc beta = ", beta)
-	fmt.Println("Weibull Beta (1/beta) = " , 1/beta)
 	fmt.Println("r = " , r)
 	fmt.Println("r² = " , r2)
-	
+	fmt.Println("A = " , outA)
+	fmt.Println("Weibull Beta (1/beta) = " , 1/beta)
+	fmt.Println("Weibull Eta (e^A)     = " , eta)
 	
 }
