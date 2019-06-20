@@ -6,41 +6,6 @@ import (
 	"sort"
 )
 
-func costG(initB float64, failsusp []float64, failonly []float64) float64 {
-	fslen := len(failsusp)
-	folen := len(failonly)
-	folenFl := float64(folen)
-
-	// define the variables for the calc
-
-	gNum := float64(0)
-	gDen := float64(0)
-	lnXi := float64(0)
-	sumLnXi := float64(0)
-
-	//calculate the numerator
-
-	for i := 0; i < fslen; i++ {
-		gNum = gNum + (math.Pow(failsusp[i], initB) * math.Log(failsusp[i]))
-		gDen = gDen + math.Pow(failsusp[i], initB)
-	}
-	// caclulate the second element of the equation
-	for i := 0; i < folen; i++ {
-		lnXi = lnXi + math.Log(failonly[i])
-	}
-	sumLnXi = lnXi / folenFl
-
-	gBeta := gNum/gDen - sumLnXi - 1/initB
-
-	fmt.Println("Numerator ", gNum)
-	fmt.Println("Denominator ", gDen)
-	fmt.Println("Sum of ln(x) ", sumLnXi)
-	fmt.Println("Estimated Beta ", gBeta)
-
-	return gBeta
-
-}
-
 func main() {
 	// Declare a slice of type float64 for times to failure
 	// need to input the data later - using test data to code the math now
@@ -191,5 +156,56 @@ func main() {
 	gBeta := costG(1/beta, ttfc, ttf)
 
 	fmt.Println("Beta and G(Beta) ", 1/beta, " ", gBeta)
+	fmt.Println()
+	
+	mleBeta := gradientDescent(1/beta, gBeta, ttf, ttfc, 2, 100)
+	
+	fmt.Println("MLE Beta ", mleBeta)
 
+}
+
+func costG(initB float64, failsusp []float64, failonly []float64) float64 {
+	fslen := len(failsusp)
+	folen := len(failonly)
+	folenFl := float64(folen)
+
+	// define the variables for the calc
+
+	gNum := float64(0)
+	gDen := float64(0)
+	lnXi := float64(0)
+	sumLnXi := float64(0)
+
+	//calculate the numerator
+
+	for i := 0; i < fslen; i++ {
+		gNum = gNum + (math.Pow(failsusp[i], initB) * math.Log(failsusp[i]))
+		gDen = gDen + math.Pow(failsusp[i], initB)
+	}
+	// caclulate the second element of the equation
+	for i := 0; i < folen; i++ {
+		lnXi = lnXi + math.Log(failonly[i])
+	}
+	sumLnXi = lnXi / folenFl
+
+	gBeta := gNum/gDen - sumLnXi - 1/initB
+
+	//fmt.Println("Numerator ", gNum)
+	//fmt.Println("Denominator ", gDen)
+	//fmt.Println("Sum of ln(x) ", sumLnXi)
+	//fmt.Println("Estimated Beta ", gBeta)
+
+	return gBeta
+
+}
+
+func gradientDescent(beta float64, gBeta float64, ttf []float64, ttfc []float64, alpha float64, num_iters int) (newBeta float64) {
+	newBeta = beta
+	newG := gBeta
+	for i := 0; i < num_iters; i++ {
+		newG = costG(newBeta, ttfc, ttf)
+		newBeta = newBeta - newG
+		//fmt.Println(i, newBeta,  newG)
+	}
+	return newBeta
 }
